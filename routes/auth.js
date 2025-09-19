@@ -44,13 +44,13 @@ router.post("/login", async (req, res) => {
   const refreshToken = generateRefreshToken(user);
 
   // 6. Відправляємо refreshToken у httpOnly cookie, а accessToken і дані користувача — у відповідь
-  res
-    .cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false, // у проді — true
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    })
+res
+  .cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: true, // обязательно для https
+    sameSite: "none", // для кросс-доменных запросов
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  })
     .json({
       user: { id: user.id, email: user.email, role: user.role },
       accessToken,
